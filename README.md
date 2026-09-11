@@ -1,7 +1,7 @@
 # 🧹 AI-Data-Preprocessing
-Project Live  : https://autoclean-ai.streamlit.app/
+Project Live  : https://ai-data-preprocessing.streamlit.app/
 
-> Upload any CSV or Excel file — get back a fully cleaned dataset, EDA charts, and actionable insights.
+> Upload any CSV or Excel file — get back a fully cleaned dataset, EDA charts, actionable insights, and the exact Python code that cleaned it — instantly.
 
 ---
 
@@ -9,12 +9,12 @@ Project Live  : https://autoclean-ai.streamlit.app/
 
 ```
 AI-Data-Preprocessing/
-├── main.py          ← Streamlit UI (entry point)
-├── cleaning.py      ← All data cleaning logic
-├── eda.py           ← EDA: charts + text insights
-├── utils.py         ← File I/O, logging, helpers
-├── api.py           ← Optional FastAPI REST backend
-├── requirements.txt ← Python dependencies
+├── main.py                        ← Streamlit UI (entry point)
+├── cleaning.py                    ← All data cleaning logic
+├── eda.py                         ← EDA: charts + text insights
+├── utils.py                       ← File I/O, logging, helpers
+├── full_preprocessing_tutorial.py ← Standalone, commented learning script
+├── requirements.txt               ← Python dependencies
 └── README.md
 ```
 DEMO PICTURES
@@ -39,34 +39,20 @@ streamlit run main.py
 
 Open your browser at **http://localhost:8501**
 
+Or just use the live app — no setup needed: **https://ai-data-preprocessing.streamlit.app/**
+
 ---
 
-## 🌐 Optional FastAPI Backend
+## 🖥️ App Tabs
 
-```bash
-uvicorn api:app --reload --port 8000
-```
-
-### Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET    | `/`      | Health check |
-| POST   | `/clean` | Upload file → download cleaned CSV |
-| POST   | `/report`| Upload file → JSON cleaning report + insights |
-| POST   | `/schema`| Upload file → raw schema JSON |
-
-**Example cURL:**
-```bash
-# Clean a file and download result
-curl -X POST http://localhost:8000/clean \
-     -F "file=@data.csv" \
-     --output cleaned_data.csv
-
-# Get JSON report
-curl -X POST http://localhost:8000/report \
-     -F "file=@data.csv"
-```
+| Tab | What it shows |
+|-----|----------------|
+| 📋 Raw Data | Original uploaded data + schema summary |
+| ✨ Cleaned Data | Fully cleaned dataset + numeric profile |
+| 🧹 Cleaning Report | Human-readable summary of every fix applied |
+| 📈 EDA & Charts | Insights, summary stats, null charts, correlation matrix, boxplots, distributions, categorical counts |
+| ⬇️ Download | Download the cleaned dataset as CSV or Excel |
+| 🧑‍💻 View Code | The **actual source code** that cleaned your file — every cleaning function shown with a plain-language explanation, right in the app |
 
 ---
 
@@ -99,11 +85,25 @@ curl -X POST http://localhost:8000/report \
 
 ---
 
+## 🧑‍💻 View Code Tab
+
+After downloading your cleaned file, open the **🧑‍💻 View Code** tab to see the
+exact code that just ran on your data — not a generic summary. Each cleaning
+step (column renaming, duplicate removal, dtype fixing, categorical
+normalization, missing-value handling, outlier capping) is shown in its own
+expander with:
+- A short explanation of what the step does and why
+- The real Python source of the function that did it
+
+Great for learning pandas, verifying what happened to your data, or copying
+the logic into your own project.
+
+---
+
 ## 📦 Dependencies
 
 ```
 streamlit, pandas, numpy, matplotlib, seaborn, openpyxl, xlrd
-fastapi, uvicorn, python-multipart  (for API only)
 ```
 
 ---
@@ -114,6 +114,7 @@ fastapi, uvicorn, python-multipart  (for API only)
 - **Encoding:** UTF-8, Latin-1, CP1252 tried automatically  
 - **IQR threshold** is adjustable in the sidebar (1.0 = aggressive, 3.0 = conservative)
 - **Download** as CSV or Excel directly from the UI
+- **View Code tab** shows exactly how your data was cleaned, function by function
 
 ---
 
